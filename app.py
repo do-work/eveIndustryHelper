@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 
 from controllers.oauth import Oauth
 
@@ -11,8 +12,13 @@ def index():
 
 
 @app.route("/oauth/authorize", methods=["GET"])
-def oauth():
+def authorize():
     Oauth().authorize()
+
+
+@app.route("/oauth-callback", methods=["GET"])
+def callback():
+    Oauth().callback(request)
 
 
 if __name__ == "__main__":
