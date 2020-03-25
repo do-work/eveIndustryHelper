@@ -4,27 +4,26 @@ import os
 import requests
 from flask import Request
 from requests import Response
+from settings import LOGIN_SERVER_BASE, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
 
 
 class Oauth:
 
-    def __init__(self):
-        self.client_id = None
-        self.client_secret = None
-        self.login_server_base = None
+    def authorize(self) -> Response:
+        url = self.get_authorize_endpoint()
+        return requests.get(url)
 
-    def authorize(self):
+    def get_authorize_endpoint(self) -> str:
         redirect_uri = os.getenv("REDIRECT_URI")
         scopes = os.getenv("SCOPES")
 
         # todo -> add state
-        url = f"{self.login_server_base}/oauth/authorize?response_type=code&redirect_uri={redirect_uri}&client_id={self.get_client_id()}&scope={scopes}"
-
-        requests.get(url)
+        return f"{LOGIN_SERVER_BASE}/oauth/authorize?response_type=code&redirect_uri={redirect_uri}&client_id={CLIENT_ID}&scope={scopes}"
 
     def callback(self, request: Request):
-        access_code = self.get_code_from_callback_uri(request)
-        access_token = self.get_access_token(access_code)
+        response = self.request_oauth_token(self.get_access_token_payload(self.get_code_from_callback_uri(request)))
+        access_token = self.get_access_token(response)
+        refresh_token = self.get_refresh_token(response)
 
     def get_code_from_callback_uri(self, request: Request) -> str:
         args = request.args
@@ -33,44 +32,44 @@ class Oauth:
             raise RuntimeError()
         return args["code"]
 
-    def get_access_token(self, access_code: str) -> str:
+    def get_access_token(self, response: Response) -> str:
         """
         Get the access token.
         Only lasts for 20 minutes.
-        :param access_code:
+        :param response:
         :return:
         """
-        response = self.request_oauth_token(access_code)
         return response.json()["access_token"]
 
-    def request_oauth_token(self, access_code: str) -> Response:
-        url = f"{self.get_login_server_base()}/oauth/token"
+    def get_refresh_token(self, response: Response) -> str:
+        return response.json()["refresh_token"]
+
+    def request_oauth_token(self, payload: dict) -> Response:
+        url = f"{LOGIN_SERVER_BASE}/oauth/token"
         headers = {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": self.construct_auth_code()
-        }
-        payload = {
-            "grant_type": "authorization_code",
-            "code": access_code
         }
         response = requests.post(url, headers=headers, data=payload)
         response.raise_for_status()
         return response
 
-    def get_login_server_base(self) -> str:
-        if not self.login_server_base:
-            self.login_server_base = os.getenv("LOGIN_SERVER_BASE")
-        return self.login_server_base
-
-    def get_client_id(self) -> str:
-        if not self.client_id:
-            self.client_id = os.getenv("CLIENT_ID")
-        return self.client_id
-
-    def get_client_secret(self) -> str:
-        if not self.client_secret:
-            self.client_secret = os.getenv("CLIENT_SECRET")
-        return self.client_secret
-
     def construct_auth_code(self) -> str:
-        return base64.b64encode(f"Basic{self.get_client_id()}:{self.get_client_secret()}")
+        auth_code_raw = f"{CLIENT_ID}:{CLIENT_SECRET}"
+        return f"Basic {base64.b64encode(auth_code_raw.encode()).decode()}"
+
+    def get_access_token_payload(self, access_code: str) -> dict:
+        return {
+            "grant_type": "authorization_code",
+            "code": access_code
+        }
+
+    def get_refresh_token_payload(self) -> dict:
+        return {
+            "grant_type": "refresh_token",
+            "refresh_token": REFRESH_TOKEN
+        }
+
+    def get_refreshed_access_token(self) -> str:
+        response = self.request_oauth_token(self.get_refresh_token_payload())
+        return self.get_access_token(response)
