@@ -42,3 +42,7 @@ class EveAPI:
     def get_corp_assets(self, corp_id: int):
         url = f"/v4/corporations/{corp_id}/assets/"
         return self.make_request("get", url).json()
+
+    def get_structure_info(self, station_id: int):
+        url = f"/v2/universe/stations/{station_id}"
+        return self.make_request("get", url).json()
