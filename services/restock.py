@@ -1,29 +1,25 @@
 from typing import List
 
 from eveAPI import EveAPI
+from services.itemLookup import ItemLookup
 
 
 class Restock:
 
-    def __init__(self, eve_api: EveAPI):
+    def __init__(self, eve_api: EveAPI, item_lookup: ItemLookup):
+        self.item_lookup = item_lookup
         self.eve_api = eve_api
 
-    def run(self):
+    # todo -> make restock_items into a namedTuple
+    def run(self, stock_items: List[dict]):
+        # todo -> cache this
+        stock_items = self.item_lookup.add_item_id(stock_items)
         character_id = self.eve_api.get_character_id()
         corp_id = self.eve_api.get_corp_id(character_id)
-        # assets = self.eve_api.get_corp_assets(corp_id)
-
-        # this one worked
-        # results = self.find_item_in_assets(assets, 25619)
-
-        # results = self.get_asset_location_flags(assets)
-
-        # corp_asset_location_ids = self.get_corp_asset_location_ids(assets, corp_id)
-        # results = self.get_location_info(corp_asset_location_ids)
-
-        # noobs mat hanger - 1030093382162
-        results = self.get_corp_assets_by_location(corp_id, 1030093382162)
-        # results = self.filter_assets(assets, 25605)
+        corp_assets = self.get_corp_assets_by_location(corp_id, 1030093382162)
+        stock_items_id = [int(stock_item["id"]) for stock_item in stock_items]
+        current_stock = self.filter_assets(corp_assets, stock_items_id)
+        results = self.restock_qty(stock_items, current_stock)
 
         return results
 
@@ -50,7 +46,7 @@ class Restock:
 
         return found_location_flags
 
-    def get_corp_asset_location_ids(self, assets, corp_id: int) -> List[int]:
+    def get_corp_asset_location_ids(self, assets) -> List[int]:
         """
         Get asset's unique location_ids.
         :param corp_id:
@@ -99,10 +95,29 @@ class Restock:
                 assets.append(corp_assets_result)
         return assets
 
-    def filter_assets(self, assets: List[dict], type_id: int):
+    def filter_assets(self, assets: List[dict], items_id: List[int]) -> List[dict]:
         results = []
-        for asset in assets:
-            if asset.get("type_id") == type_id:
-                results.append(asset)
+        for item_id in items_id:
+            for asset in assets:
+                if asset.get("type_id") == item_id:
+                    results.append(asset)
 
         return results
+
+    def restock_qty(self, stock_items: List[dict], current_stock: List[dict]) -> List[dict]:
+        restock = []
+        for stock_item in stock_items:
+            stock_item_min = stock_item.get("min")
+            stock_item_max = stock_item.get("max")
+            for current_stock_item in current_stock:
+                if current_stock_item.get("type_id") != stock_item.get("id"):
+                    continue
+                current_stock_qty = current_stock_item.get("quantity")
+                if current_stock_qty < stock_item_min:
+                    restock_qty = stock_item_max - current_stock_qty
+                    restock.append({
+                        "name": stock_item.get("item_name"),
+                        "id": stock_item.get("id"),
+                        "restock_qty": restock_qty
+                    })
+        return restock

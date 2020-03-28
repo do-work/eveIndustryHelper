@@ -3,6 +3,7 @@ from flask import request
 
 from controllers.oauth import Oauth
 from eveAPI import EveAPI
+from services.itemLookup import ItemLookup
 from services.restock import Restock
 
 app = Flask(__name__)
@@ -24,11 +25,12 @@ def callback():
     return jsonify(Oauth().callback(request))
 
 
-@app.route("/corp/assets", methods=["GET"])
-def corp_assets():
-    corp_assets_results = Restock(EveAPI(Oauth())).run()
+@app.route("/restock", methods=["POST"])
+def restock():
+    payload = request.json["payload"]
+    restock_results = Restock(EveAPI(Oauth()), ItemLookup()).run(payload)
 
-    return jsonify(corp_assets_results)
+    return jsonify(restock_results)
 
 
 if __name__ == "__main__":
