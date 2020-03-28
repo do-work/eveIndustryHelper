@@ -24,11 +24,12 @@ class EveAPI:
             self.header = {"authorization": f"Bearer {self._get_token()}"}
         return self.header
 
-    def make_request(self, method: str, endpoint: str, base_url=ESI_BASE):
+    def make_request(self, method: str, endpoint: str, base_url=ESI_BASE, params: dict = None):
         full_url = f"{base_url}{endpoint}"
 
-        if method.lower() == 'get':
-            return requests.get(full_url, headers=self._get_header())
+        method = method.lower()
+        if method == 'get':
+            return requests.get(full_url, headers=self._get_header(), params=params)
 
     def get_character_id(self):
         url = "/oauth/verify"
