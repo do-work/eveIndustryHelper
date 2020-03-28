@@ -40,8 +40,17 @@ class EveAPI:
         return self.make_request("get", url).json().get("corporation_id")
 
     def get_corp_assets(self, corp_id: int):
-        url = f"/v4/corporations/{corp_id}/assets/"
-        return self.make_request("get", url).json()
+        url = f"/v4/corporations/{corp_id}/assets"
+        res = self.make_request("get", url)
+        pages = int(res.headers["x-pages"])
+
+        corp_assets = res.json()
+        if pages == 1:
+            return corp_assets
+        for page in range(2, pages + 1):
+            page_results = self.make_request("get", url, params={"page": page}).json()
+            for page_result in page_results:
+                corp_assets.append(page_result)
 
     def get_structure_info(self, station_id: int):
         url = f"/v2/universe/stations/{station_id}"
