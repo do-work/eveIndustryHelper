@@ -53,6 +53,8 @@ class EveAPI:
             for page_result in page_results:
                 corp_assets.append(page_result)
 
-    def get_structure_info(self, station_id: int):
+        return corp_assets
+
+    def get_station_info(self, station_id: int):
         url = f"/v2/universe/stations/{station_id}"
         return self.make_request("get", url).json()
