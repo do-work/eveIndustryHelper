@@ -28,3 +28,10 @@ Debug into the app to get the refresh token and save token to .`env` file.
 
 ## Run
 `python app.py`
+
+
+## Reference
+ESI-Docs: https://github.com/esi/esi-docs  
+Quick "Item Id" lookup: https://eve-files.com/chribba/typeid.txt  
+Eve data dump (SDE - static data export): https://developers.eveonline.com/resource/resources  
+Fuzzworks data dump: https://www.fuzzwork.co.uk/dump/latest/
