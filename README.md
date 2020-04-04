@@ -14,21 +14,24 @@ EVE Online industry and market helper.
 
 ## Setup
 1. Create new app at https://developers.eveonline.com/applications
-1. Select the following scopes:
-    1. esi-assets.read_assets.v1 
-    1. esi-markets.read_character_orders.v1 
-    1. esi-assets.read_corporation_assets.v1
-1. Create `.env` file and populate with keys from `.env.example`
-1. Add the provided `Client ID` and `Secret Key` values to your `.env` file.
-
-### SSO (one time only)
-GET `/oauth/authorize`  
-Authorize on CCP server the first time.  
-Debug into the app to get the refresh token and save token to .`env` file.
-
+    1. Any "Name" and "description" will work.
+    1. Connection Type = "Authentication & API Access".
+    1. Permissions = Select the following scopes:
+        1. esi-assets.read_assets.v1 
+        1. esi-markets.read_character_orders.v1 
+        1. esi-assets.read_corporation_assets.v1
+    1. Callback URL = `http:localhost:9001/oauth-callback`
+1. Copy `/config/env.example` as `/config/config.env` and populate the missing keys as follows:
+    1. CLIENT_ID = From the eve app page
+    1. CLIENT_SECRET = From the eve app page
+    1. REFRESH_TOKEN =
+        1. GET `/oauth/authorize`
+        1. Authorize on CCP server which should redirect back to /oauth-callback containing the refresh token.
+        
 ## Run
-`python app.py`
-
+1. `python app.py`
+1. `POST /restock`
+    1. Use the sample request at `/tests/http/restock.http`
 
 ## Reference
 ESI-Docs: https://github.com/esi/esi-docs  
