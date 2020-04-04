@@ -1,0 +1,203 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://127.0.0.1:9001/restock?output=text
+Content-Type: application/json
+
+{
+  "payload":
+  [
+    {
+      "item_name": "Artificial Neural Network",
+      "min": 2000,
+      "max": 4000
+    },
+    {
+      "item_name": "Armor Plates",
+      "min": 3500,
+      "max": 7000
+    },
+    {
+      "item_name": "Burned Logic Circuit",
+      "min": 10000,
+      "max": 12000
+    },
+    {
+      "item_name": "Capacitor Console",
+      "min": 200,
+      "max": 400
+    },
+    {
+      "item_name": "Conductive Thermoplastic",
+      "min": 200,
+      "max": 500
+    },
+    {
+      "item_name": "Contaminated Nanite Compound",
+      "min": 2500,
+      "max": 5500
+    },
+    {
+      "item_name": "Current Pump",
+      "min": 200,
+      "max": 1000
+    },
+    {
+      "item_name": "Drone Transceiver",
+      "min": 80,
+      "max": 160
+    },
+    {
+      "item_name": "Enhanced Ward Console",
+      "min": 200,
+      "max": 250
+    },
+    {
+      "item_name": "Fried Interface Circuit",
+      "min": 4000,
+      "max": 8000
+    },
+    {
+      "item_name": "Impetus Console",
+      "min": 250,
+      "max": 310
+    },
+    {
+      "item_name": "Intact Armor Plates",
+      "min": 160,
+      "max": 320
+    },
+    {
+      "item_name": "Intact Shield Emitter",
+      "min": 300,
+      "max": 400
+    },
+    {
+      "item_name": "Interface Circuit",
+      "min": 1000,
+      "max": 2000
+    },
+    {
+      "item_name": "Logic Circuit",
+      "min": 1000,
+      "max": 1800
+    },
+    {
+      "item_name": "Lorentz Fluid",
+      "min": 800,
+      "max": 1500
+    },
+    {
+      "item_name": "Melted Capacitor Console",
+      "min": 3000,
+      "max": 3500
+    },
+    {
+      "item_name": "Micro Circuit",
+      "min": 1000,
+      "max": 2000
+    },
+    {
+      "item_name": "Nanite Compound",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Power Circuit",
+      "min": 800,
+      "max": 1500
+    },
+    {
+      "item_name": "Power Conduit",
+      "min": 100,
+      "max": 200
+    },
+    {
+      "item_name": "Single-crystal Superalloy I-beam",
+      "min": 300,
+      "max": 350
+    },
+    {
+      "item_name": "Tripped Power Circuit",
+      "min": 9000,
+      "max": 10000
+    },
+    {
+      "item_name": "Thruster Console",
+      "min": 1000,
+      "max": 2000
+    },
+    {
+      "item_name": "Ward Console",
+      "min": 1800,
+      "max": 2000
+    },
+    {
+      "item_name": "Accelerant Decryptor",
+      "min": 100,
+      "max": 150
+    },
+    {
+      "item_name": "Augmentation Decryptor",
+      "min": 50,
+      "max": 100
+    },
+    {
+      "item_name": "Parity Decryptor",
+      "min": 100,
+      "max": 150
+    },
+    {
+      "item_name": "Symmetry Decryptor",
+      "min": 100,
+      "max": 150
+    },
+    {
+      "item_name": "Datacore - Electromagnetic Physics",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Datacore - Electronic Engineering",
+      "min": 100,
+      "max": 150
+    },
+    {
+      "item_name": "Datacore - High Energy Physics",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Datacore - Hydromagnetic Physics",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Datacore - Molecular Engineering",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Datacore - Nanite Engineering",
+      "min": 300,
+      "max": 600
+    },
+    {
+      "item_name": "Datacore - Quantum Physics",
+      "min": 300,
+      "max": 500
+    },
+    {
+      "item_name": "Datacore - Rocket Science",
+      "min": 300,
+      "max": 500
+    }
+  ]
+}
+
+###
