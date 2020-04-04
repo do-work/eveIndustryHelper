@@ -137,3 +137,9 @@ class Restock:
                         "restock_qty": restock_qty
                     })
         return restock
+
+    def format_for_clipboard(self, restock_results: List[dict]) -> str:
+        results = ''
+        for restock_result in restock_results:
+            results += f"{restock_result['name']} {restock_result['restock_qty']}\n"
+        return results
