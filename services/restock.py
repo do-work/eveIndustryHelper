@@ -11,14 +11,15 @@ class Restock:
         self.eve_api = eve_api
 
     # todo -> make restock_items into a namedTuple
-    def run(self, stock_items: List[dict]):
+    def run(self, stock_items: List[dict]) -> List[dict]:
         # todo -> cache this
         stock_items = self.item_lookup.add_item_id(stock_items)
         character_id = self.eve_api.get_character_id()
         corp_id = self.eve_api.get_corp_id(character_id)
         corp_assets = self.get_corp_assets_by_location(corp_id, 1030093382162)
+        corp_assets_consolidated = self.consolidate_duplicate_assets(corp_assets)
         stock_items_id = [int(stock_item["id"]) for stock_item in stock_items]
-        current_stock = self.filter_assets(corp_assets, stock_items_id)
+        current_stock = self.filter_assets(corp_assets_consolidated, stock_items_id)
         results = self.restock_qty(stock_items, current_stock)
 
         return results
@@ -49,7 +50,7 @@ class Restock:
     def get_corp_asset_location_ids(self, assets) -> List[int]:
         """
         Get asset's unique location_ids.
-        :param corp_id:
+        :param assets:
         :return:
         """
         location_ids = set()
@@ -94,6 +95,21 @@ class Restock:
             if not corp_assets_result.get("is_singleton"):
                 assets.append(corp_assets_result)
         return assets
+
+    def consolidate_duplicate_assets(self, assets: List[dict]):
+        results = []
+        for asset in assets:
+            found_duplicate = False
+            for result in results:
+                if result.get("type_id") == asset.get("type_id"):
+                    current_qty = result.get("quantity")
+                    result["quantity"] = current_qty + asset.get("quantity")
+                    found_duplicate = True
+                    break
+            if not found_duplicate:
+                results.append(asset)
+                continue
+        return results
 
     def filter_assets(self, assets: List[dict], items_id: List[int]) -> List[dict]:
         results = []
