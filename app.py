@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask, jsonify
 from flask import request
 
@@ -30,8 +32,13 @@ def callback():
 
 @app.route("/restock", methods=["POST"])
 def restock():
-    payload = request.json["payload"]
-    restock_results = Restock(EveAPI(Oauth()), ItemLookup()).run(payload)
+    _restock = Restock(EveAPI(Oauth(app.config), config=app.config), ItemLookup(app.config))
+    restock_results = _restock.run(request.json["payload"])
+
+    output_param = request.args.get("output")
+    if output_param and output_param == 'text':
+        restock_results = _restock.format_for_clipboard(restock_results)
+        sys.stdout.write(str(restock_results))
 
     return jsonify(restock_results)
 
