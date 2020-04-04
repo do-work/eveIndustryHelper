@@ -26,7 +26,7 @@ class Oauth:
     def callback(self, request: Request):
         response = self.request_oauth_token(self.get_access_token_payload(self.get_code_from_callback_uri(request)))
         access_token = self.get_access_token(response)
-        refresh_token = self.get_refresh_token(response)
+        return self.get_refresh_token(response)
 
     def get_code_from_callback_uri(self, request: Request) -> str:
         args = request.args

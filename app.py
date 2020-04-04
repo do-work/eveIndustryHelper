@@ -27,7 +27,8 @@ def authorize():
 
 @app.route("/oauth-callback", methods=["GET"])
 def callback():
-    return jsonify(Oauth(app.config).callback(request))
+    refresh_token = Oauth(app.config).callback(request)
+    return jsonify({"refresh_token": refresh_token})
 
 
 @app.route("/restock", methods=["POST"])
