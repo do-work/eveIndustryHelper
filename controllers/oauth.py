@@ -4,10 +4,12 @@ import os
 import requests
 from flask import Request
 from requests import Response
-from settings import LOGIN_SERVER_BASE, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN
 
 
 class Oauth:
+
+    def __init__(self, config: dict):
+        self.config = config
 
     def authorize(self) -> Response:
         url = self.get_authorize_endpoint()
@@ -18,7 +20,8 @@ class Oauth:
         scopes = os.getenv("SCOPES")
 
         # todo -> add state
-        return f"{LOGIN_SERVER_BASE}/oauth/authorize?response_type=code&redirect_uri={redirect_uri}&client_id={CLIENT_ID}&scope={scopes}"
+        return f"{self.config['LOGIN_SERVER_BASE']}/oauth/authorize?response_type=code&redirect_uri={redirect_uri}" \
+               f"&client_id={self.config['CLIENT_ID']}&scope={scopes}"
 
     def callback(self, request: Request):
         response = self.request_oauth_token(self.get_access_token_payload(self.get_code_from_callback_uri(request)))
@@ -45,7 +48,7 @@ class Oauth:
         return response.json()["refresh_token"]
 
     def request_oauth_token(self, payload: dict) -> Response:
-        url = f"{LOGIN_SERVER_BASE}/oauth/token"
+        url = f"{self.config['LOGIN_SERVER_BASE']}/oauth/token"
         headers = {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": self.construct_auth_code()
@@ -55,7 +58,7 @@ class Oauth:
         return response
 
     def construct_auth_code(self) -> str:
-        auth_code_raw = f"{CLIENT_ID}:{CLIENT_SECRET}"
+        auth_code_raw = f"{self.config['CLIENT_ID']}:{self.config['CLIENT_SECRET']}"
         return f"Basic {base64.b64encode(auth_code_raw.encode()).decode()}"
 
     def get_access_token_payload(self, access_code: str) -> dict:
@@ -67,7 +70,7 @@ class Oauth:
     def get_refresh_token_payload(self) -> dict:
         return {
             "grant_type": "refresh_token",
-            "refresh_token": REFRESH_TOKEN
+            "refresh_token": self.config['REFRESH_TOKEN']
         }
 
     def get_refreshed_access_token(self) -> str:

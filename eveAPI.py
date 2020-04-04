@@ -1,15 +1,15 @@
 import requests
 
 from controllers.oauth import Oauth
-from settings import LOGIN_SERVER_BASE
 
 
 class EveAPI:
 
     ESI_BASE = "https://esi.evetech.net"
 
-    def __init__(self, oauth: Oauth):
+    def __init__(self, oauth: Oauth, config: dict):
         self.auth = oauth
+        self.config = config
         self.header = None
         self.token = None
 
@@ -33,7 +33,7 @@ class EveAPI:
 
     def get_character_id(self):
         url = "/oauth/verify"
-        response = self.make_request("get", url, base_url=LOGIN_SERVER_BASE).json()
+        response = self.make_request("get", url, base_url=self.config['LOGIN_SERVER_BASE']).json()
         return response.get("CharacterID")
 
     def get_corp_id(self, character_id: str):
@@ -52,6 +52,8 @@ class EveAPI:
             page_results = self.make_request("get", url, params={"page": page}).json()
             for page_result in page_results:
                 corp_assets.append(page_result)
+
+        # todo -> combine duplicates if the item was not stacked - use logic at Restock.consolidate_duplicate_assets
 
         return corp_assets
 

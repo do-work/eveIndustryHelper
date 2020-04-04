@@ -3,16 +3,15 @@ import pathlib
 from pathlib import Path
 from typing import List
 
-from settings import PROJECT_ROOT
-
 
 class ItemLookup:
 
-    def __init__(self):
+    def __init__(self, config: dict):
         self.parsed_file = None
+        self.config = config
 
     def get_invtypes_path(self, filename) -> Path:
-        return pathlib.Path(PROJECT_ROOT).joinpath("static", filename)
+        return pathlib.Path(self.config['PROJECT_ROOT']).joinpath("static", filename)
 
     def parse_file(self, filepath):
         if self.parsed_file:
