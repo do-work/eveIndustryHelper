@@ -21,8 +21,7 @@ class Restock:
         stock_items_id = [int(stock_item["id"]) for stock_item in stock_items]
         current_stock = self.filter_assets(corp_assets_consolidated, stock_items_id)
         results = self.restock_qty(stock_items, current_stock)
-
-        return results
+        return self.round_qty(results)
 
     def find_item_in_assets(self, assets, type_id):
         found = []
@@ -143,3 +142,13 @@ class Restock:
         for restock_result in restock_results:
             results += f"{restock_result['name']} {restock_result['restock_qty']}\n"
         return results
+
+    def round_qty(self, restock_results: List[dict]) -> List[dict]:
+        for restock_result in restock_results:
+            restock_qty = str(restock_result["restock_qty"])
+            restock_qty_length = len(restock_qty)
+            if restock_qty_length == 1:
+                continue
+            round_multiple = int("1" + "0"*(restock_qty_length - 2))
+            restock_result["restock_qty"] -= int(restock_qty) % -round_multiple
+        return restock_results
