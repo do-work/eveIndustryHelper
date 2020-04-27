@@ -149,6 +149,6 @@ class Restock:
             restock_qty_length = len(restock_qty)
             if restock_qty_length == 1:
                 continue
-            round_multiple = int("1" + "0"*(restock_qty_length - 2))
+            round_multiple = int("1" + "0"*max([(restock_qty_length - 2), 1]))
             restock_result["restock_qty"] -= int(restock_qty) % -round_multiple
         return restock_results
