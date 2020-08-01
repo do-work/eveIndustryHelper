@@ -41,7 +41,7 @@ class EveAPI:
         return self.make_request("get", url).json().get("corporation_id")
 
     def get_corp_assets(self, corp_id: int):
-        url = f"/v4/corporations/{corp_id}/assets"
+        url = f"/v5/corporations/{corp_id}/assets"
         res = self.make_request("get", url)
         pages = int(res.headers["x-pages"])
 
