@@ -59,8 +59,8 @@ Content-Type: application/json
     },
     {
       "item_name": "Drone Transceiver",
-      "min": 80,
-      "max": 160
+      "min": 150,
+      "max": 300
     },
     {
       "item_name": "Enhanced Ward Console",
@@ -224,17 +224,18 @@ Content-Type: application/json
       "max": 500
     },
     {
-      "item_name": "Crystalline Carbonide",
-      "min": 200000,
-      "max": 450000
+      "item_name": "Datacore - Mechanical Engineering",
+      "min": 300,
+      "max": 500
     },
     {
-      "item_name": "Robotics",
-      "min": 500,
-      "max": 1000
+      "item_name": "Datacore - Laser Physics",
+      "min": 300,
+      "max": 500
     }
   ]
 }
+
 
 
 

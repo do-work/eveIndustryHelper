@@ -1,0 +1,132 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+POST http://127.0.0.1:9001/restock?output=text
+Content-Type: application/json
+
+{
+  "payload": [
+    {
+      "item_name": "Mexallon",
+      "min": 6000000,
+      "max": 12000000
+    },
+    {
+      "item_name": "Morphite",
+      "min": 5500,
+      "max": 11000
+    },
+    {
+      "item_name": "Pyerite",
+      "min": 3300000,
+      "max": 6600000
+    },
+    {
+      "item_name": "Tritanium",
+      "min": 12000000,
+      "max": 24000000
+    },
+    {
+      "item_name": "Construction Blocks",
+      "min": 1800,
+      "max": 3600
+    },
+    {
+      "item_name": "Crystalline Carbonide",
+      "min": 200000,
+      "max": 450000
+    },
+    {
+      "item_name": "Fermionic Condensates",
+      "min": 3000,
+      "max": 6000
+    },
+    {
+      "item_name": "Fernite Carbide",
+      "min": 510000,
+      "max": 1100000
+    },
+    {
+      "item_name": "Ferrogel",
+      "min": 6000,
+      "max": 12000
+    },
+    {
+      "item_name": "Fullerides",
+      "min": 40000,
+      "max": 80000
+    },
+    {
+      "item_name": "High-Tech Transmitters",
+      "min": 40,
+      "max": 80
+    },
+    {
+      "item_name": "Miniature Electronics",
+      "min": 200,
+      "max": 500
+    },
+    {
+      "item_name": "Nanotransistors",
+      "min": 14000,
+      "max": 28000
+    },
+    {
+      "item_name": "Nonlinear Metamaterials",
+      "min": 1800,
+      "max": 3600
+    },
+    {
+      "item_name": "Phenolic Composites",
+      "min": 40000,
+      "max": 80000
+    },
+    {
+      "item_name": "Plasmonic Metamaterials",
+      "min": 15000,
+      "max": 30000
+    },
+    {
+      "item_name": "Photonic Metamaterials",
+      "min": 1800,
+      "max": 3600
+    },
+    {
+      "item_name": "Robotics",
+      "min": 3000,
+      "max": 6000
+    },
+    {
+      "item_name": "Sylramic Fibers",
+      "min": 230000,
+      "max": 460000
+    },
+    {
+      "item_name": "Terahertz Metamaterials",
+      "min": 8000,
+      "max": 16000
+    },
+    {
+      "item_name": "Transcranial Microcontrollers",
+      "min": 20,
+      "max": 40
+    },
+    {
+      "item_name": "Tungsten Carbide",
+      "min": 220000,
+      "max": 540000
+    },
+    {
+      "item_name": "Zero-Point Condensate",
+      "min": 2500,
+      "max": 5000
+    }
+  ]
+}
+
+###
