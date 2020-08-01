@@ -30,6 +30,28 @@ def callback():
     return jsonify({"refresh_token": refresh_token})
 
 
+@app.route("/corp/contracts", methods=["GET"])
+def corp_contracts():
+    results = EveAPI(Oauth(app.config), config=app.config).get_corp_contracts(98098444)
+    return jsonify(list(results))
+
+
+@app.route("/asset/locations",  methods=["GET"])
+def asset_locations():
+    corp_assets = CorpAssets(EveAPI(Oauth(app.config), config=app.config), ItemLookup(app.config))
+    corp_asset_locations = corp_assets.get_location_ids_for_all_corp_assets(98098444)
+    return jsonify(list(corp_asset_locations))
+
+
+@app.route("/asset/<int:item_id>/locate", methods=["GET"])
+def asset_location_by_structure_location(item_id: int):
+    corp_assets = CorpAssets(EveAPI(Oauth(app.config), config=app.config), ItemLookup(app.config))
+    asset_results = corp_assets.get_corp_assets(98098444)
+    corp_asset_locations = corp_assets.get_items_location_ids_from_assets(asset_results, item_id)
+
+    return jsonify(list(corp_asset_locations))
+
+
 @app.route("/restock", methods=["POST"])
 def restock():
     _restock = Restock(EveAPI(Oauth(app.config), config=app.config), ItemLookup(app.config))
