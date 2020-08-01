@@ -16,7 +16,7 @@ class Restock:
         stock_items = self.item_lookup.add_item_id(stock_items)
         character_id = self.eve_api.get_character_id()
         corp_id = self.eve_api.get_corp_id(character_id)
-        corp_assets = self.get_corp_assets_by_location(corp_id, 1030093382162)
+        corp_assets = self.get_corp_assets_by_location(corp_id, 1033366865839)
         corp_assets_consolidated = self.consolidate_duplicate_assets(corp_assets)
         stock_items_id = [int(stock_item["id"]) for stock_item in stock_items]
         current_stock = self.filter_assets(corp_assets_consolidated, stock_items_id)
@@ -120,21 +120,26 @@ class Restock:
         return results
 
     def restock_qty(self, stock_items: List[dict], current_stock: List[dict]) -> List[dict]:
+        def _restock(item, qty):
+            return {
+                "name": item.get("item_name"),
+                "id": item.get("id"),
+                "restock_qty": qty
+            }
         restock = []
         for stock_item in stock_items:
             stock_item_min = stock_item.get("min")
             stock_item_max = stock_item.get("max")
+            current_stock_item_found = False
             for current_stock_item in current_stock:
                 if current_stock_item.get("type_id") != stock_item.get("id"):
                     continue
+                current_stock_item_found = True
                 current_stock_qty = current_stock_item.get("quantity")
                 if current_stock_qty < stock_item_min:
-                    restock_qty = stock_item_max - current_stock_qty
-                    restock.append({
-                        "name": stock_item.get("item_name"),
-                        "id": stock_item.get("id"),
-                        "restock_qty": restock_qty
-                    })
+                    restock.append(_restock(stock_item, stock_item_max - current_stock_qty))
+            if not current_stock_item_found:
+                restock.append(_restock(stock_item, stock_item_max))
         return restock
 
     def format_for_clipboard(self, restock_results: List[dict]) -> str:
