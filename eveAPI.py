@@ -60,3 +60,8 @@ class EveAPI:
     def get_station_info(self, station_id: int):
         url = f"/v2/universe/stations/{station_id}"
         return self.make_request("get", url).json()
+
+    def get_corp_contracts(self, corp_id: int):
+        url = f"/v1/corporations/{corp_id}/contracts/"
+        response = self.make_request("get", url)
+        return response.json()
