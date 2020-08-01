@@ -27,14 +27,23 @@ EVE Online industry and market helper.
     1. REFRESH_TOKEN =
         1. GET `/oauth/authorize`
         1. Authorize on CCP server which should redirect back to /oauth-callback containing the refresh token.
-        
+1. Get corporation_id
+1. Get character_id
+1. Get "location_id" of the station or structure
+    1. If your location is not listed in reference#5 then create a corp contract to your location and GET /corp/contracts
+1. Get "container_id" where your mats are stored at the location above         
+
 ## Run
 1. `python app.py`
 1. `POST /restock`
     1. Use the sample request at `/tests/http/restock.http`
 
+## Note
+If you need to change your scopes you will need to get a new refresh token. 
+
 ## Reference
-ESI-Docs: https://github.com/esi/esi-docs  
-Quick "Item Id" lookup: https://eve-files.com/chribba/typeid.txt  
-Eve data dump (SDE - static data export): https://developers.eveonline.com/resource/resources  
-Fuzzworks data dump: https://www.fuzzwork.co.uk/dump/latest/
+1. ESI-Docs: https://github.com/esi/esi-docs  
+1. Quick "Item Id" lookup: https://eve-files.com/chribba/typeid.txt  
+1. Eve data dump (SDE - static data export): https://developers.eveonline.com/resource/resources  
+1. Fuzzworks data dump: https://www.fuzzwork.co.uk/dump/latest/
+1. Location_ids: https://www.adam4eve.eu/info_stations.php
